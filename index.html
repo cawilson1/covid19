@@ -115,6 +115,11 @@
         if (arg.Countries.Country === undefined) {
           temp.shift();
         }
+        for (let i = 0; i < temp.length; i++) {
+          if (temp[i].Country === "Iran") {
+            temp.splice(i, 1);
+          }
+        }
         const sortedCountries = temp.sort(function(a, b) {
           return b.TotalConfirmed - a.TotalConfirmed;
         });
