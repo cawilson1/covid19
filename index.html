@@ -105,7 +105,7 @@
         COVID-19 Cases By Country<br />Flash Cards
       </div>
     </header>
-    <div id="render" class="render"></div>
+    <div id="render" class="render"><img src="loading.gif" /></div>
     <script>
       function display(arg) {
         const dateString = `: ` + `${arg.Date}`.slice(0, 10);
@@ -123,6 +123,7 @@
         const sortedCountries = temp.sort(function(a, b) {
           return b.TotalConfirmed - a.TotalConfirmed;
         });
+        document.getElementById("render").innerHTML = "";
         for (let i = 0; i < sortedCountries.length; i++) {
           const curCo = sortedCountries[i];
           const clr = (arg => {
