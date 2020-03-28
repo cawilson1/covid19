@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Coronavirus by country</title>
+    <title>COVID-19 by country</title>
   </head>
   <body>
     <style>
@@ -18,6 +18,7 @@
       .datetext {
         display: flex;
         justify-content: center;
+        font-size: 2vw;
       }
       .death {
         color: red;
@@ -72,24 +73,49 @@
           width: 25vw;
         }
       }
-      @media only screen and (max-width: 400px) {
+      @media only screen and (max-width: 420px) {
         .card {
           width: 30vw;
+          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+          transition: 0.3s;
+          width: 25vw;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          margin: 1vw;
+          padding: 1vw;
+          border-radius: 5px;
+          font-size: 2vw;
         }
-        .zero {
-          background-color: beige;
+        .rank {
+          color: blue;
         }
+        .titlerank {
+          font-size: 2vw;
+          font-weight: bolder;
+        }
+      }
+      .zero {
+        background-color: rgb(245, 222, 220);
       }
     </style>
     <header>
-      <div id="date" class="datetext">COVID-19 Cases By Country</div>
+      <div id="date" class="datetext">
+        COVID-19 Cases By Country<br />Trading Cards
+      </div>
     </header>
     <div id="render" class="render"></div>
     <script>
       function display(arg) {
         const dateString = `: ` + `${arg.Date}`.slice(0, 10);
         document.getElementById("date").innerHTML += dateString;
-        const sortedCountries = arg.Countries.sort(function(a, b) {
+        console.log(arg.Countries.Country);
+        var temp = arg.Countries;
+        if (arg.Countries.Country === undefined) {
+          temp.shift();
+        }
+        const sortedCountries = temp.sort(function(a, b) {
           return b.TotalConfirmed - a.TotalConfirmed;
         });
         for (let i = 0; i < sortedCountries.length; i++) {
@@ -100,14 +126,14 @@
           document.getElementById("render").innerHTML += `<div id=${
             curCo.Country
           } class="card ${clr}">
-              <p id=country${i}></p>
-              <p id=totalconf${i} class="confirmed"></p>
-              <p id=newconf${i} class="confirmed"></p>
-              <p class="rank">Rank by total Cases: ${i + 1}
-              <p id=totaldeath${i} class="death"></p>
-              <p id=newdeath${i} class="death"></p>
-              <p id=totalrec${i} class="recovered"></p>
-              <p id=newrec${i} class="recovered"></p>
+              <div id=country${i}></div><br />
+              <div id=totalconf${i} class="confirmed"></div>
+              <div id=newconf${i} class="confirmed"></div><br />
+              <div class="rank">Rank by total Cases: ${i + 1}</div><br />
+              <div id=totaldeath${i} class="death"></div>
+              <div id=newdeath${i} class="death"></div><br />
+              <div id=totalrec${i} class="recovered"></div>
+              <div id=newrec${i} class="recovered"></div>
           </div>`;
 
           document.getElementById(
