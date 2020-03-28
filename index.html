@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Coronavirus by country</title>
+  </head>
+  <body>
+    <style>
+      header {
+        display: flex;
+        justify-content: center;
+        margin: 0px;
+        font-size: larger;
+        padding: 5vw;
+      }
+      .datetext {
+        display: flex;
+        justify-content: center;
+      }
+      .death {
+        color: red;
+        font-weight: bold;
+      }
+      .confirmed {
+        color: green;
+      }
+      .render {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .rank {
+        color: blue;
+      }
+      .titlerank {
+        font-size: 2vw;
+        font-weight: bolder;
+      }
+      .recovered {
+        color: blueviolet;
+      }
+      .card {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        width: 15vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 1vw;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: beige;
+      }
+
+      .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+      }
+      .zero {
+        background-color: rgb(244, 218, 218);
+      }
+
+      @media only screen and (max-width: 1000px) {
+        .card {
+          width: 25vw;
+        }
+      }
+      @media only screen and (max-width: 800px) {
+        .card {
+          width: 25vw;
+        }
+      }
+      @media only screen and (max-width: 600px) {
+        .card {
+          width: 30vw;
+        }
+        .zero {
+          background-color: beige;
+        }
+      }
+    </style>
+    <header>
+      <div id="date" class="datetext">COVID-19 Cases By Country</div>
+    </header>
+    <div id="render" class="render"></div>
+    <script>
+      function display(arg) {
+        const dateString = `: ` + `${arg.Date}`.slice(0, 10);
+        document.getElementById("date").innerHTML += dateString;
+        const sortedCountries = arg.Countries.sort(function(a, b) {
+          return b.TotalConfirmed - a.TotalConfirmed;
+        });
+        for (let i = 0; i < sortedCountries.length; i++) {
+          const curCo = sortedCountries[i];
+          const clr = (arg => {
+            if (arg % 2 === 0) return "zero";
+          })(i);
+          document.getElementById("render").innerHTML += `<div id=${
+            curCo.Country
+          } class="card ${clr}">
+              <p id=country${i}></p>
+              <p id=totalconf${i} class="confirmed"></p>
+              <p id=newconf${i} class="confirmed"></p>
+              <p class="rank">Rank by total Cases: ${i + 1}
+              <p id=totaldeath${i} class="death"></p>
+              <p id=newdeath${i} class="death"></p>
+              <p id=totalrec${i} class="recovered"></p>
+              <p id=newrec${i} class="recovered"></p>
+          </div>`;
+
+          document.getElementById(
+            `country${i}`
+          ).innerHTML = `<span class="rank titlerank">${i +
+            1}</span><br /><br />&nbsp   Country:    ${curCo.Country}`;
+          document.getElementById(
+            `newconf${i}`
+          ).innerHTML = `Confirmed Today:    ${curCo.NewConfirmed}`;
+          document.getElementById(
+            `totalconf${i}`
+          ).innerHTML = `Total Confirmed:    ${curCo.TotalConfirmed}`;
+          document.getElementById(
+            `newdeath${i}`
+          ).innerHTML = `Deaths Today:    ${curCo.NewDeaths}`;
+          document.getElementById(
+            `totaldeath${i}`
+          ).innerHTML = `Total Deaths:    ${curCo.TotalDeaths}`;
+          document.getElementById(
+            `newrec${i}`
+          ).innerHTML = `Recovered Today:    ${curCo.NewRecovered}`;
+          document.getElementById(
+            `totalrec${i}`
+          ).innerHTML = `Total Recovered:    ${curCo.TotalRecovered}`;
+        }
+      }
+      fetch("https://api.covid19api.com/summary")
+        .then(res => res.json())
+        .then(display);
+    </script>
+  </body>
+</html>
