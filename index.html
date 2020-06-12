@@ -105,9 +105,18 @@
         COVID-19 Cases By Country<br />Flash Cards
       </div>
     </header>
+    <div id="top" class="render"></div>
     <div id="render" class="render"><img src="loading.gif" /></div>
     <script>
       function display(arg) {
+        let country = "All Countries";
+        let totalConfirmedAll = 0;
+        let totalNewConfirmedAll = 0;
+        let newDeathsAll = 0;
+        let totalDeathsAll = 0;
+        let deathRateAll = 0;
+        let totalRecoveredAll = 0;
+        let recoveredTodayAll = 0;
         const dateString = `: ` + `${arg.Date}`.slice(0, 10);
         document.getElementById("date").innerHTML += dateString;
         console.log(arg.Countries.Country);
@@ -126,18 +135,29 @@
         document.getElementById("render").innerHTML = "";
         for (let i = 0; i < sortedCountries.length; i++) {
           const curCo = sortedCountries[i];
+          totalConfirmedAll += curCo.TotalConfirmed;
+          totalNewConfirmedAll += curCo.NewConfirmed;
+          newDeathsAll += curCo.NewDeaths;
+          totalDeathsAll += curCo.TotalDeaths;
+          deathRateAll += curCo.TotalConfirmed;
+          totalRecoveredAll += curCo.TotalRecovered;
+          recoveredTodayAll += curCo.NewRecovered;
           const clr = (arg => {
             if (arg % 2 === 0) return "zero";
           })(i);
-          document.getElementById("render").innerHTML += `<div id=${
-            curCo.Country
-          } class="card ${clr}">
+          document.getElementById("render").innerHTML += `
+          <div id=${curCo.Country} class="card ${clr}">
               <div id=country${i}></div><br />
               <div id=totalconf${i} class="confirmed"></div>
               <div id=newconf${i} class="confirmed"></div><br />
+              
               <div class="rank">Rank by total Cases: ${i + 1}</div><br />
+
               <div id=totaldeath${i} class="death"></div>
+              <div id=deathrate${i} class="death"></div>
               <div id=newdeath${i} class="death"></div><br />
+
+
               <div id=totalrec${i} class="recovered"></div>
               <div id=newrec${i} class="recovered"></div>
           </div>`;
@@ -159,12 +179,53 @@
             `totaldeath${i}`
           ).innerHTML = `Total Deaths:    ${curCo.TotalDeaths}`;
           document.getElementById(
+            `deathrate${i}`
+          ).innerHTML = `Death Rate:    ${(
+            (curCo.TotalDeaths / curCo.TotalConfirmed).toFixed(3) * 100
+          ).toFixed(2)}%`;
+          document.getElementById(
             `newrec${i}`
           ).innerHTML = `Recovered Today:    ${curCo.NewRecovered}`;
           document.getElementById(
             `totalrec${i}`
           ).innerHTML = `Total Recovered:    ${curCo.TotalRecovered}`;
         }
+        document.getElementById("top").innerHTML += `
+          <div id="all" class="card" style="background-color:black;">
+              <div style="color:white">All Countries</div><br />
+              <div id="totalConfirmedAll" class="confirmed"></div>
+              <div id="totalNewConfirmedAll" class="confirmed"></div><br />
+
+              <div id="totalDeathsAll" class="death"></div>
+              <div id="deathRateAll" class="death"></div>
+              <div id="newDeathsAll" class="death"></div><br />
+
+
+              <div id="totalRecoveredAll" class="recovered"></div>
+              <div id="recoveredTodayAll" class="recovered"></div>
+          </div>`;
+
+        document.getElementById(
+          `totalNewConfirmedAll`
+        ).innerHTML = `Confirmed Today:    ${totalNewConfirmedAll}`;
+        document.getElementById(
+          `totalConfirmedAll`
+        ).innerHTML = `Total Confirmed:    ${totalConfirmedAll}`;
+        document.getElementById(
+          `newDeathsAll`
+        ).innerHTML = `Deaths Today:    ${newDeathsAll}`;
+        document.getElementById(
+          `totalDeathsAll`
+        ).innerHTML = `Total Deaths:    ${totalDeathsAll}`;
+        document.getElementById(`deathRateAll`).innerHTML = `Death Rate:    ${(
+          (totalDeathsAll / totalConfirmedAll).toFixed(3) * 100
+        ).toFixed(2)}%`;
+        document.getElementById(
+          `recoveredTodayAll`
+        ).innerHTML = `Recovered Today:    ${recoveredTodayAll}`;
+        document.getElementById(
+          `totalRecoveredAll`
+        ).innerHTML = `Total Recovered:    ${totalRecoveredAll}`;
       }
       fetch("https://api.covid19api.com/summary")
         .then(res => res.json())

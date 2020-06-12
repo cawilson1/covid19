@@ -1,0 +1,15 @@
+{
+  "users": [
+    {
+      "firstname": "John",
+      "lastname": "Smith",
+      "cell": "555-2416",
+      "work": "888-888-888"
+    },
+    {
+      "firstname": "Jane",
+      "lastname": "Smith",
+      "cell": "555-3499"
+    }
+  ]
+}
